@@ -2,3 +2,7 @@
 credentials
 *.csv
 notebooks/.ipynb_checkpoints/1.0-ie-data-exploration-checkpoint.ipynb
+src/__pycache__/__init__.cpython-311.pyc
+src/data/__pycache__/__init__.cpython-311.pyc
+src/data/__pycache__/process_pipeline.cpython-311.pyc
+src/data/__pycache__/processed_data.cpython-311.pyc
