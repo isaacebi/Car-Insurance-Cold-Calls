@@ -6,3 +6,4 @@ src/__pycache__/__init__.cpython-311.pyc
 src/data/__pycache__/__init__.cpython-311.pyc
 src/data/__pycache__/process_pipeline.cpython-311.pyc
 src/data/__pycache__/processed_data.cpython-311.pyc
+notebooks/.ipynb_checkpoints/2.0-ie-base-model-checkpoint.ipynb
