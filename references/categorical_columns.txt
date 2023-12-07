@@ -1,0 +1,13 @@
+Age
+Job
+Marital
+Education
+Default
+HHInsurance
+CarLoan
+Communication
+LastContactDay
+LastContactMonth
+NoOfContacts
+PrevAttempts
+Outcome
