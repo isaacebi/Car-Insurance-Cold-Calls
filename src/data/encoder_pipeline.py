@@ -27,10 +27,12 @@ class getEncoder:
         self.project_name = project_name
         
     def label_encoder(self):
+        # create file
         ENCODER_DIR = os.path.join(ENCODERS, self.project_name)
         if not os.path.exists(ENCODER_DIR):
             os.makedirs(ENCODER_DIR)
         
+        # initialize label encoder
         le = LabelEncoder()
         cat_df = self.df.select_dtypes(include=[object])
         
