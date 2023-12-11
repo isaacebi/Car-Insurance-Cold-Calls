@@ -12,3 +12,4 @@ src/data/__pycache__/feature_selection_pipeline.cpython-311.pyc
 notebooks/.ipynb_checkpoints/2.0-ie-base-model-auto-feature-selection-checkpoint.ipynb
 *checkpoint*
 *__pycache__*
+*tfevents*
