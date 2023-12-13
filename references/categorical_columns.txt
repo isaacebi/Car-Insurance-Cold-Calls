@@ -6,8 +6,11 @@ Default
 HHInsurance
 CarLoan
 Communication
+HasCommuncation
 LastContactDay
 LastContactMonth
 NoOfContacts
 PrevAttempts
 Outcome
+Outcome_Simplify
+CallCategory
