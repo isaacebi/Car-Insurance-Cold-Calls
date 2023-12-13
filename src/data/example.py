@@ -43,6 +43,7 @@ df = pd.read_csv(TRAIN_PATH)
 # ensuring no missing data
 df = process_pipeline.process_data(df)
 
+# %%
 # Encoding
 le = encoder_pipeline.getEncoder(ENCODER_PATH, df, PROJECT_NAME)
 # return numeric datatype DataFrame
@@ -73,3 +74,5 @@ selected_labels = FS.get_columns(0.5)
 
 
 
+
+# %%
