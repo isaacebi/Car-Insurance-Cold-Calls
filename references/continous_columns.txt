@@ -3,3 +3,5 @@ DaysPassed
 CallStart
 CallEnd
 CallDuration
+SinLastContactMonth
+CosLastContactMonth
