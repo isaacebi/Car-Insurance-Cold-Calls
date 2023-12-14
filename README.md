@@ -31,7 +31,7 @@ Share insights from the exploratory data analysis phase. This may include data v
 
 ## Model Building
 
--
+After several trial and error, its not beneficial to build a model without a proper data pipeline for example, I always going forth and back when doing feature engineering. Therefore, all model building will be in halt until a proper preprocessing pipeline is constructed. It really is a good invesment to build a proper pipeline.
 
 ## Results
 
