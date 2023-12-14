@@ -28,7 +28,7 @@ def categorize_time(total_seconds):
         return 'Evening'
 
 
-# %% Imputer
+# %% Imputer Function
 
 # Job
 def imputerJob(data):
@@ -52,7 +52,24 @@ def imputerOutcome(data):
 
 # %% Feature Engineering
 
-# Age # Job # Marital # Eduaction # Default 
+# Age 
+
+# Job 
+def featureJob(data):
+    data['Job'] = data['Job'].astype('category')
+    return data
+
+# Marital 
+def featureMarital(data):
+    data['Marital'] = data['Marital'].astype('category')
+    return data
+
+# Eduaction 
+def featureEducation(data):
+    data['Education'] = data['Education'].astype('category')
+    return data
+
+# Default 
 
 # Balance 
 def featureBalance(data):
@@ -73,11 +90,13 @@ def featureBalance(data):
 
 # Communication
 def featureCommunication(data):
+    # simplify category
     data['HasCommuncation'] = data['Communication'].apply(lambda data: 0 if data == 'No Communication' else 1)
+
+    data['Communication'] = data['Communication'].astype('category')
     return data
 
 # LastContactMonth
-# powered by GPT3.5
 def featureLastContactMonth(data):
     # Assuming 'month' is a column in your DataFrame
     month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
@@ -104,7 +123,7 @@ def featureCall(data):
     data['CallEnd'] = data['CallEnd'].apply(lambda x: x.hour * 60 * 60 + x.minute * 60 + x.second)
 
     # new feature on when the call happen
-    data['CallCategory'] = data['CallStart'].apply(categorize_time)
+    data['CallCategory'] = data['CallStart'].apply(categorize_time).astype('category')
     return data
 
 # NoOfContacts 
@@ -121,7 +140,10 @@ def featurePrevAttempts(data):
 
 # Outcome
 def featureOutcome(data):
+    # simplify outcome
     data['Outcome_Simplify'] = data['Outcome'].apply(lambda data: 1 if data == 'success' else 0)
+
+    data['Outcome'] = data['Outcome'].astype('category')
     return data
 
 # %%
@@ -131,13 +153,17 @@ def process_data(data):
     data = imputerCommunication(data)
     data = imputerEducation(data)
     data = imputerOutcome(data)
+
+    data = featureJob(data)
+    data = featureMarital(data)
+    data = featureEducation(data)
     # data = featureBalance(data)
-    # data = featureCommunication(data)
+    data = featureCommunication(data)
     data = featureLastContactMonth(data)
     data = featureCall(data)
     # data = featureDaysPassed(data)
     # data = featurePrevAttempts(data)
-    # data = featureOutcome(data)
+    data = featureOutcome(data)
     return data
 
 def save_process(data):
