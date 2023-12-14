@@ -12,5 +12,5 @@ LastContactMonth
 NoOfContacts
 PrevAttempts
 Outcome
-Outcome_Simplify
 CallCategory
+negativeBalance
