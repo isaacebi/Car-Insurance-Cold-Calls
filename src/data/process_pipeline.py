@@ -7,6 +7,7 @@ Created on Mon Dec  4 15:44:43 2023
 
 # %% Importing libraries
 import os
+import numpy as np
 import pandas as pd
 from datetime import datetime
 
@@ -51,7 +52,24 @@ def imputerOutcome(data):
 
 # %% Feature Engineering
 
-# Age # Job # Marital # Eduaction # Default # Balance # HHInsurance # CarLoan
+# Age # Job # Marital # Eduaction # Default 
+
+# Balance 
+def featureBalance(data):
+    data['logBalance'] = np.log(data['Balance'])
+    data['sqrtBalance'] = np.where(data['Balance'] >= 0, np.sqrt(data['Balance']), 0)
+    data['cbrtBalance'] = np.cbrt(data['Balance'])
+    data['negativeBalance'] = data['Balance'].apply(lambda x: 1 if x < 0 else 0)
+
+    # after log some of it has missing data, fill the nan with small_constants
+    small_constant = 1e-10
+    data['logBalance'].fillna(small_constant, inplace=True)
+
+    # handling negative -inf
+    data['logBalance'] = data['logBalance'].apply(lambda x: small_constant if x == -np.inf else x)
+    return data
+
+# HHInsurance # CarLoan
 
 # Communication
 def featureCommunication(data):
@@ -59,6 +77,16 @@ def featureCommunication(data):
     return data
 
 # LastContactMonth
+# powered by GPT3.5
+def featureLastContactMonth(data):
+    # Assuming 'month' is a column in your DataFrame
+    month_order = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    data['LastContactMonth'] = data['LastContactMonth'].map(lambda x: month_order.index(x) + 1)  # Map strings to numeric values
+
+    # Cyclic encoding
+    data['SinLastContactMonth'] = np.sin(2 * np.pi * data['LastContactMonth'] / 12)
+    data['CosLastContactMonth'] = np.cos(2 * np.pi * data['LastContactMonth'] / 12)
+    return data
 
 # LastContactDay
 
@@ -86,7 +114,10 @@ def featureDaysPassed(data):
     data['DaysPassed_Simplify'] = data['DaysPassed'].apply(lambda x: 0 if x == -1 else 0)
     return data
 
-# # PrevAttempts
+# PrevAttempts
+def featurePrevAttempts(data):
+    data['PrevAttemp_Simplify'] = data['PrevAttempts'].apply(lambda x: 1 if x > 0 else 0)
+    return data
 
 # Outcome
 def featureOutcome(data):
@@ -100,10 +131,13 @@ def process_data(data):
     data = imputerCommunication(data)
     data = imputerEducation(data)
     data = imputerOutcome(data)
-    data = featureCommunication(data)
+    # data = featureBalance(data)
+    # data = featureCommunication(data)
+    data = featureLastContactMonth(data)
     data = featureCall(data)
-    data = featureDaysPassed(data)
-    data = featureOutcome(data)
+    # data = featureDaysPassed(data)
+    # data = featurePrevAttempts(data)
+    # data = featureOutcome(data)
     return data
 
 def save_process(data):
