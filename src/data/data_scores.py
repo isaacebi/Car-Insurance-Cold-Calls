@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 from xgboost import XGBClassifier
 from xgboost import plot_importance
 
-from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 # %% Pathing
 CURRENT_DIR = os.getcwd()
@@ -33,7 +34,7 @@ def get_features_score():
     # some of dtypes in X is still in obj
     for col in X:
         # encoded object then scaling
-        if X[col].dtype == 'O':
+        if X[col].dtype == 'category':
             X[col] = LabelEncoder().fit_transform(X[col])
             X[col] = StandardScaler().fit_transform(np.expand_dims(X[col], axis=-1))
 
@@ -46,6 +47,7 @@ def get_features_score():
 
     # define model
     model = XGBClassifier()
+    # model = LogisticRegression()
 
     # fit the model
     model.fit(X_train, y_train)
@@ -55,14 +57,18 @@ def get_features_score():
     shap_values = explainer.shap_values(X_test)
 
     # visualize feature importance
+    # ----- Reasoning ----- #
+    # The reason between differences interpertation between model.feature_importance_ and shap values are mainly
+    # due to the model.feature_importances are based on the train sets while shap are based on the X_test  
+    fig, ax = plt.subplots(figsize=(12, 12))
+    ax.barh(X.columns.tolist(), model.feature_importances_)
+    plt.show()
+
     shap.summary_plot(shap_values, X_test, plot_type='bar')
-    plt.show()
-
     shap.summary_plot(shap_values, X_test)
-    plt.show()
 
-    plt.barh(X.columns.tolist(), model.feature_importances_)
-    plt.show()
+# %% Directly run function
+get_features_score()
 
 # %% This section need to be further explore in the future
 # # define model
