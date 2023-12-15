@@ -124,6 +124,10 @@ def featureCall(data):
 
     # new feature on when the call happen
     data['CallCategory'] = data['CallStart'].apply(categorize_time).astype('category')
+
+    # new feature to indicate after a certain call was made, might be a leaky feature
+    CallMean = data['CallDuration'][data['CarInsurance']].mean()
+    data['CallFlag'] = data['CallDuration'].apply(lambda x: 1 if x >= CallMean else 0)
     return data
 
 # NoOfContacts 
@@ -170,7 +174,6 @@ def save_process(data):
     data = process_data(data)
     data.to_csv(DATA_PROCESSED_PATH, 'train_processed.csv')
     return data
-
 
 
 
