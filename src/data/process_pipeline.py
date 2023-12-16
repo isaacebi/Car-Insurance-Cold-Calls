@@ -50,9 +50,27 @@ def imputerOutcome(data):
     data['Outcome'] = data['Outcome'].fillna('failure')
     return data
 
-# %% Feature Engineering
+# %% 
+
+#######################
+# Feature Engineering #
+#######################
+
+# Based on : https://www.kaggle.com/code/emmaren/cold-calls-data-mining-and-model-selection <-- Shoutout to this guy
+# Client features: Age, Job, Marital, Education, Default, Balance, HHInsurance, CarLoan
+# Communication features: LastContactDay, LastContactMonth, CallStart, CallEnd, Communication, NoOfContacts, DaysPassed
+# Previous campaign features: PrevAttempts, Outcome
+
 
 # Age 
+
+
+def featureAge(data):
+    # Create age groups with 10-year intervals
+    bins = [18, 30, 40, 50, 60, 70, 80, 90, 100]  # Adjust as needed
+    labels = ['18-29', '30-39', '40-49', '50-59', '60-69', '70-79', '80-89', '90-100']
+    data['AgeGroup'] = pd.cut(data['Age'], bins=bins, labels=labels, right=False).astype('category')
+    return data
 
 # Job 
 def featureJob(data):
@@ -73,17 +91,18 @@ def featureEducation(data):
 
 # Balance 
 def featureBalance(data):
-    data['logBalance'] = np.log(data['Balance'])
-    data['sqrtBalance'] = np.where(data['Balance'] >= 0, np.sqrt(data['Balance']), 0)
-    data['cbrtBalance'] = np.cbrt(data['Balance'])
+    # data['logBalance'] = np.log(data['Balance'])
+    # data['sqrtBalance'] = np.where(data['Balance'] >= 0, np.sqrt(data['Balance']), 0)
+    # data['cbrtBalance'] = np.cbrt(data['Balance'])
     data['negativeBalance'] = data['Balance'].apply(lambda x: 1 if x < 0 else 0)
+    data['BalanceFlag'] = data['Balance'].apply(lambda x: 1 if (x<4000 and x>2000) else 0)
 
     # after log some of it has missing data, fill the nan with small_constants
-    small_constant = 1e-10
-    data['logBalance'].fillna(small_constant, inplace=True)
+    # small_constant = 1e-10
+    # data['logBalance'].fillna(small_constant, inplace=True)
 
     # handling negative -inf
-    data['logBalance'] = data['logBalance'].apply(lambda x: small_constant if x == -np.inf else x)
+    # data['logBalance'] = data['logBalance'].apply(lambda x: small_constant if x == -np.inf else x)
     return data
 
 # HHInsurance # CarLoan
@@ -158,10 +177,11 @@ def process_data(data):
     data = imputerEducation(data)
     data = imputerOutcome(data)
 
+    data = featureAge(data)
     data = featureJob(data)
     data = featureMarital(data)
     data = featureEducation(data)
-    # data = featureBalance(data)
+    data = featureBalance(data)
     data = featureCommunication(data)
     data = featureLastContactMonth(data)
     data = featureCall(data)
