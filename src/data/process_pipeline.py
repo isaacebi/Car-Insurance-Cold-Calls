@@ -127,6 +127,9 @@ def featureLastContactMonth(data):
     return data
 
 # LastContactDay
+def featureLastContactDay(data):
+    data['LastContactWeek'] = data['LastContactDay'].apply(lambda x: round(x / 7))
+    return data
 
 # CallStart # CallEnd # CallDuration
 def featureCall(data):
@@ -184,9 +187,10 @@ def process_data(data):
     data = featureBalance(data)
     data = featureCommunication(data)
     data = featureLastContactMonth(data)
+    data = featureLastContactDay(data)
     data = featureCall(data)
-    # data = featureDaysPassed(data)
-    # data = featurePrevAttempts(data)
+    data = featureDaysPassed(data)
+    data = featurePrevAttempts(data)
     data = featureOutcome(data)
     return data
 
